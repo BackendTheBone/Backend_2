@@ -1,0 +1,47 @@
+package com.nps.coco.domain.user.entity;
+
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
+
+
+@Getter
+@Builder // setter 메서드 대신 빌더를 통해 매개변수 전달 -> 매개변수 많은 경우 코드 가독성 높여줌
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // 모든 필드를 매개변수로 받는 생성자
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 매개변수가 없는 생성자 -> protected: 외부에서 직접 생성자에 접근 못함. 주로 JPA에서 엔티티 객체를 생성할때 사용
+@Entity
+public class User{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long userId;
+
+    @NotNull()
+    private String email;
+
+    @NotNull()
+    private String password;
+
+    @NotNull()
+    private String name;
+
+    @NotNull()
+    @CreatedDate // 엔티티 생성될때 날짜+시간 자동
+    @Column(name = "created_at", updatable = false) // 업데이트 안되도록 막기
+    private LocalDateTime createdAt;
+
+    @NotNull()
+    @LastModifiedDate // 엔티티 업데이트될때 날짜+시간 자동
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @NotNull()
+    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    private String status;
+}
