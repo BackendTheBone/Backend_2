@@ -1,16 +1,26 @@
 package com.nps.coco.domain.user.controller;
 
-import org.springframework.stereotype.Controller;
+import com.nps.coco.domain.user.dto.SignUpDto;
+import com.nps.coco.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
-    // 컨트롤러에 무슨 기능 필요?
-    /*
-       - 회원 가입 signUp
-       - 로그인(판매자, 사용자) signIn
-       - 로그아웃 logout
-       - 사용자 정보 수정 updateUser
-       - 회원 탈퇴 deleteUser
-    * */
 
+    private final UserService userService;
+
+    @PostMapping("/signUp")
+    public ResponseEntity<SignUpDto> signup(@RequestBody SignUpDto signUpDto) {
+        SignUpDto signResponse = userService.signUp(signUpDto);
+
+        return new ResponseEntity<>(signResponse, HttpStatus.OK);
+    }
 }
