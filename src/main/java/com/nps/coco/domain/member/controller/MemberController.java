@@ -1,7 +1,7 @@
-package com.nps.coco.domain.user.controller;
+package com.nps.coco.domain.member.controller;
 
-import com.nps.coco.domain.user.dto.SignUpDto;
-import com.nps.coco.domain.user.service.UserService;
+import com.nps.coco.domain.member.dto.SignUpDto;
+import com.nps.coco.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/users")
+public class MemberController {
 
-    private final UserService userService;
+    private final MemberService memberService;
 
     @PostMapping("/signUp")
     public ResponseEntity<SignUpDto> signup(@RequestBody SignUpDto signUpDto) {
-        SignUpDto signResponse = userService.signUp(signUpDto);
+        SignUpDto signResponse = memberService.signUp(signUpDto);
 
         return new ResponseEntity<>(signResponse, HttpStatus.OK);
     }

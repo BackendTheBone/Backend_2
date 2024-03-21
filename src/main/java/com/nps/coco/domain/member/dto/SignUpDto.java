@@ -1,4 +1,4 @@
-package com.nps.coco.domain.user.dto;
+package com.nps.coco.domain.member.dto;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.nps.coco.domain.user.entity;
+package com.nps.coco.domain.member.entity;
 
-import com.nps.coco.domain.user.dto.SignUpDto;
+import com.nps.coco.domain.member.dto.SignUpDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 매개변수가 없는 생성자 -> protected: 외부에서 직접 생성자에 접근 못함. 주로 JPA에서 엔티티 객체를 생성할때 사용
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class User{
+public class Member{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class User{
     @Column(columnDefinition = "VARCHAR(1)")
     private String status = "N";
 
-    public User(SignUpDto signUpDto) {
+    public Member(SignUpDto signUpDto) {
         this.email = signUpDto.getEmail();
         this.name = signUpDto.getName();
         this.password = signUpDto.getPassword();

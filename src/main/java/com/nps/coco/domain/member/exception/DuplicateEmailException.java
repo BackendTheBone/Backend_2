@@ -1,4 +1,4 @@
-package com.nps.coco.domain.user.exception;
+package com.nps.coco.domain.member.exception;
 
 public class DuplicateEmailException extends RuntimeException {
 
