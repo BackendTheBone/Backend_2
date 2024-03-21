@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -18,12 +17,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    @Transactional
-    public SignUpDto signUp(SignUpDto signUpDto) {
+    public void signUp(SignUpDto signUpDto) {
         validateDuplicateEmail(signUpDto.getEmail());
         Member member = new Member(signUpDto);
         memberRepository.save(member);
-        return new SignUpDto(member.getEmail());
     }
 
     public void validateDuplicateEmail(String email) {
