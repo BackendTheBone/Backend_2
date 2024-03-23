@@ -38,6 +38,8 @@ public class MemberController {
     public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
         try {
             memberService.signIn(signInDto);
+
+
             Member member = (Member) session.getAttribute("member");
 
             if(member != null) {
@@ -48,6 +50,17 @@ public class MemberController {
             }
         }
         catch (MemberNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(){
+        try {
+            memberService.logout();
+            return ResponseEntity.accepted().body("ACCEPT");
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
         }
     }

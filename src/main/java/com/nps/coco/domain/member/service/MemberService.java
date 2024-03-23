@@ -52,4 +52,8 @@ public class MemberService {
             throw new MemberNotFoundException("비밀번호");
         }
     }
+
+    public void logout() {
+        session.removeAttribute("member");
+    }
 }
