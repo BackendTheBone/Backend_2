@@ -34,7 +34,8 @@ public class Product {
     private String image;
 
     @NotNull
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
     @Builder
     private Product(Seller seller, String name, Long price, String product_detail, String image) {
@@ -43,7 +44,7 @@ public class Product {
         this.price = price;
         this.product_detail = product_detail;
         this.image = image;
-        this.status = "N";
+        this.status = ProductStatus.ACTIVE;
     }
 
     public void update(ProductInfo info) {
@@ -51,6 +52,10 @@ public class Product {
         this.price = info.getPrice();
         this.product_detail = info.getProduct_detail();
         this.image = info.getImage();
+    }
+
+    public void delete() {
+        this.status = ProductStatus.INACTIVE;
     }
 
 }

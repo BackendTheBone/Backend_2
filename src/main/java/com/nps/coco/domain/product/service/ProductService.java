@@ -46,4 +46,13 @@ public class ProductService {
         product.update(info);
     }
 
+    /**
+     * 상품 삭제
+     */
+    @Transactional
+    public void delete(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.delete();
+    }
+
 }
