@@ -37,4 +37,13 @@ public class ProductService {
         return product.getId();
     }
 
+    /**
+     * 상품 수정
+     */
+    @Transactional
+    public void edit(Long productId, ProductInfo info) {
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.update(info);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.nps.coco.domain.product.entity;
 
+import com.nps.coco.domain.product.dto.ProductInfo;
 import com.nps.coco.domain.seller.entity.Seller;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -43,6 +44,13 @@ public class Product {
         this.product_detail = product_detail;
         this.image = image;
         this.status = "N";
+    }
+
+    public void update(ProductInfo info) {
+        this.name = info.getName();
+        this.price = info.getPrice();
+        this.product_detail = info.getProduct_detail();
+        this.image = info.getImage();
     }
 
 }
