@@ -6,6 +6,7 @@ import com.nps.coco.domain.member.dto.SignUpDto;
 import com.nps.coco.domain.member.entity.Member;
 import com.nps.coco.domain.member.exception.DuplicateEmailException;
 import com.nps.coco.domain.member.exception.MemberNotFoundException;
+import com.nps.coco.domain.member.exception.ValidateMember;
 import com.nps.coco.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class MemberService {
 
     private final HttpSession session;
 
-    public MemberService(MemberRepository memberRepository, HttpSession session) {
+    private MemberService(MemberRepository memberRepository, HttpSession session) {
         this.memberRepository = memberRepository;
         this.session = session;
     }
@@ -28,7 +29,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public void validateDuplicateEmail(String email) {
+    private void validateDuplicateEmail(String email) {
         memberRepository.findByEmail(email)
                 .ifPresent(user -> {
                     throw new DuplicateEmailException();
@@ -42,18 +43,31 @@ public class MemberService {
         session.setAttribute("member", member);
     }
 
-    public Member validateNotFoundEmail(String email) {
+    private Member validateNotFoundEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() ->  new MemberNotFoundException("아이디"));
     }
 
-    public void validateNotFoundPass(String inputPass, String realPass) {
+    private void validateNotFoundPass(String inputPass, String realPass) {
         if (!inputPass.equals(realPass)) {
             throw new MemberNotFoundException("비밀번호");
         }
     }
 
     public void logout() {
-        session.removeAttribute("member");
+        session.invalidate();
     }
+
+    public void deleteMember() {
+        Member member = (Member) session.getAttribute("member");
+        validateLogin(member);
+        memberRepository.deleteById(member.getUserId());
+    }
+
+    private void validateLogin(Member member) {
+        if (member == null) {
+            throw new ValidateMember();
+        }
+    }
+
 }

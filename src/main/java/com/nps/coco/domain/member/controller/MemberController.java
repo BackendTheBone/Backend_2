@@ -64,4 +64,16 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
         }
     }
+
+    @PostMapping("/deleteMember")
+    public ResponseEntity<?> deleteMember(){
+        try {
+            memberService.deleteMember();
+            session.invalidate();
+            return ResponseEntity.accepted().body("ACCEPT");
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
+        }
+    }
 }
