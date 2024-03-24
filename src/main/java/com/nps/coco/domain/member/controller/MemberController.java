@@ -5,7 +5,10 @@ import com.nps.coco.domain.member.dto.SignUpDto;
 import com.nps.coco.domain.member.entity.Member;
 import com.nps.coco.domain.member.exception.DuplicateEmailException;
 import com.nps.coco.domain.member.exception.MemberNotFoundException;
+import com.nps.coco.domain.member.service.DeleteService;
 import com.nps.coco.domain.member.service.MemberService;
+import com.nps.coco.domain.member.service.SignInService;
+import com.nps.coco.domain.member.service.SignUpService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,12 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final SignUpService signUpService;
+    private final SignInService signInService;
+    private final DeleteService deleteService;
     private final HttpSession session;
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
         try {
-            memberService.signUp(signUpDto);
+            signUpService.signUp(signUpDto);
             return ResponseEntity.accepted().body("ACCEPT");
         }
         catch (DuplicateEmailException e) {
@@ -37,7 +43,7 @@ public class MemberController {
     @PostMapping("/signIn")
     public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
         try {
-            memberService.signIn(signInDto);
+            signInService.signIn(signInDto);
 
 
             Member member = (Member) session.getAttribute("member");
@@ -68,7 +74,7 @@ public class MemberController {
     @PostMapping("/deleteMember")
     public ResponseEntity<?> deleteMember(){
         try {
-            memberService.deleteMember();
+            deleteService.deleteMember();
             session.invalidate();
             return ResponseEntity.accepted().body("ACCEPT");
         }
