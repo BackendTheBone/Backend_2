@@ -6,7 +6,6 @@ import com.nps.coco.domain.member.entity.Member;
 import com.nps.coco.domain.member.exception.DuplicateEmailException;
 import com.nps.coco.domain.member.exception.MemberNotFoundException;
 import com.nps.coco.domain.member.service.DeleteService;
-import com.nps.coco.domain.member.service.MemberService;
 import com.nps.coco.domain.member.service.SignInService;
 import com.nps.coco.domain.member.service.SignUpService;
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/member")
 public class MemberController {
 
-    private final MemberService memberService;
     private final SignUpService signUpService;
     private final SignInService signInService;
     private final DeleteService deleteService;
@@ -63,7 +61,7 @@ public class MemberController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(){
         try {
-            memberService.logout();
+            signInService.logout();
             return ResponseEntity.accepted().body("ACCEPT");
         }
         catch (Exception e) {
