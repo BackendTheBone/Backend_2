@@ -4,6 +4,7 @@ import com.nps.coco.domain.member.dto.SignUpDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,14 +15,15 @@ import java.time.LocalDateTime;
 @Builder // setter 메서드 대신 빌더를 통해 매개변수 전달 -> 매개변수 많은 경우 코드 가독성 높여줌
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // 모든 필드를 매개변수로 받는 생성자
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 매개변수가 없는 생성자 -> protected: 외부에서 직접 생성자에 접근 못함. 주로 JPA에서 엔티티 객체를 생성할때 사용
+@SQLDelete(sql = "UPDATE Member SET status = 'Y' WHERE member_id = ?")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Member{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @NotNull()
     private String email;

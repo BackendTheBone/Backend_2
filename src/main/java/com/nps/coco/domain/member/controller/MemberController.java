@@ -71,9 +71,9 @@ public class MemberController {
 
     @PostMapping("/deleteMember")
     public ResponseEntity<?> deleteMember(){
-        try {
+        try{
             deleteService.deleteMember();
-            session.invalidate();
+            session.removeAttribute("member");
             return ResponseEntity.accepted().body("ACCEPT");
         }
         catch (Exception e) {
