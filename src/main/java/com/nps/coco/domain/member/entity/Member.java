@@ -53,4 +53,9 @@ public class Member{
         this.name = signUpDto.getName();
         this.password = signUpDto.getPassword();
     }
+
+    public void update(String password, String name) {
+        this.password = password;
+        this.name = name;
+    }
 }
