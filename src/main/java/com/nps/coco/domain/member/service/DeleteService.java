@@ -14,12 +14,13 @@ public class DeleteService {
 
     private final HttpSession session;
 
-    private DeleteService(MemberRepository memberRepository, HttpSession session) {
+    public DeleteService(MemberRepository memberRepository, HttpSession session) {
         this.memberRepository = memberRepository;
         this.session = session;
     }
 
 
+    @Transactional
     public void deleteMember() {
         Member member = (Member) session.getAttribute("member");
         validateLogin(member);
