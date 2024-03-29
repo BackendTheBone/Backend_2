@@ -1,6 +1,6 @@
 package com.nps.coco.domain.member.service;
 
-import com.nps.coco.domain.member.dto.SignUpDto;
+import com.nps.coco.domain.member.dto.SignUpRequest;
 import com.nps.coco.domain.member.entity.Member;
 import com.nps.coco.domain.member.exception.DuplicateEmailException;
 import com.nps.coco.domain.member.repository.MemberRepository;
@@ -15,9 +15,9 @@ public class SignUpService {
         this.memberRepository = memberRepository;
     }
 
-    public void signUp(SignUpDto signUpDto) {
-        validateDuplicateEmail(signUpDto.getEmail());
-        Member member = new Member(signUpDto);
+    public void signUp(String email, String name, String password) {
+        validateDuplicateEmail(email);
+        Member member = new Member(email, name, password);
         memberRepository.save(member);
     }
 

@@ -1,6 +1,6 @@
 package com.nps.coco.domain.member.entity;
 
-import com.nps.coco.domain.member.dto.SignUpDto;
+import com.nps.coco.domain.member.dto.SignUpRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -48,10 +48,10 @@ public class Member{
     @Column(columnDefinition = "VARCHAR(1)")
     private String status = "N";
 
-    public Member(SignUpDto signUpDto) {
-        this.email = signUpDto.getEmail();
-        this.name = signUpDto.getName();
-        this.password = signUpDto.getPassword();
+    public Member(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
     }
 
     public void update(String password, String name) {

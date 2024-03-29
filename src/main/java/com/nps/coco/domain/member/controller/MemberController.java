@@ -2,8 +2,8 @@ package com.nps.coco.domain.member.controller;
 
 import com.nps.coco.domain.member.dto.ModifyRequest;
 import com.nps.coco.domain.member.dto.PassCheckRequest;
-import com.nps.coco.domain.member.dto.SignInDto;
-import com.nps.coco.domain.member.dto.SignUpDto;
+import com.nps.coco.domain.member.dto.SignInRequest;
+import com.nps.coco.domain.member.dto.SignUpRequest;
 import com.nps.coco.domain.member.entity.Member;
 import com.nps.coco.domain.member.exception.DuplicateEmailException;
 import com.nps.coco.domain.member.exception.MemberNotFoundException;
@@ -32,9 +32,9 @@ public class MemberController {
     private final HttpSession session;
 
     @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest request) {
         try {
-            signUpService.signUp(signUpDto);
+            signUpService.signUp(request.getEmail(), request.getName(), request.getPassword());
             return ResponseEntity.accepted().body("ACCEPT");
         }
         catch (DuplicateEmailException e) {
@@ -43,11 +43,9 @@ public class MemberController {
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
+    public ResponseEntity<?> signIn(@RequestBody SignInRequest request) {
         try {
-            signInService.signIn(signInDto);
-
-
+            signInService.signIn(request.getPassword(), request.getEmail());
             Member member = (Member) session.getAttribute("member");
 
             if(member != null) {

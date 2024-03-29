@@ -1,6 +1,6 @@
 package com.nps.coco.domain.member.service;
 
-import com.nps.coco.domain.member.dto.SignInDto;
+import com.nps.coco.domain.member.dto.SignInRequest;
 import com.nps.coco.domain.member.entity.Member;
 import com.nps.coco.domain.member.exception.MemberNotFoundException;
 import com.nps.coco.domain.member.repository.MemberRepository;
@@ -19,9 +19,9 @@ public class SignInService {
         this.session = session;
     }
 
-    public void signIn(SignInDto signInDto) {
-        Member member = validateNotFoundEmail(signInDto.getEmail());
-        validateNotFoundPass(signInDto.getPassword(), member.getPassword());
+    public void signIn(String password, String email) {
+        Member member = validateNotFoundEmail(email);
+        validateNotFoundPass(password, member.getPassword());
 
         session.setAttribute("member", member);
     }
