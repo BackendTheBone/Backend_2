@@ -5,8 +5,6 @@ import com.nps.coco.domain.member.dto.PassCheckRequest;
 import com.nps.coco.domain.member.dto.SignInRequest;
 import com.nps.coco.domain.member.dto.SignUpRequest;
 import com.nps.coco.domain.member.entity.Member;
-import com.nps.coco.domain.member.exception.DuplicateEmailException;
-import com.nps.coco.domain.member.exception.MemberNotFoundException;
 import com.nps.coco.domain.member.service.DeleteService;
 import com.nps.coco.domain.member.service.ModifyService;
 import com.nps.coco.domain.member.service.SignInService;
@@ -37,7 +35,7 @@ public class MemberController {
             signUpService.signUp(request.getEmail(), request.getName(), request.getPassword());
             return ResponseEntity.accepted().body("ACCEPT");
         }
-        catch (DuplicateEmailException e) {
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
         }
     }
@@ -55,7 +53,7 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
             }
         }
-        catch (MemberNotFoundException e) {
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
         }
     }
