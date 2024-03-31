@@ -1,9 +1,8 @@
 package com.nps.coco.domain.product.entity;
 
-import com.nps.coco.domain.product.dto.ProductInfo;
+import com.nps.coco.domain.product.dto.UpdateProductRequest;
 import com.nps.coco.domain.seller.entity.Seller;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -17,24 +16,22 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "seller_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id", nullable = false)
     private Seller seller;
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
     private Long price;
 
-    @NotNull
     private String product_detail;
 
-    @NotNull
     private String image;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProductStatus status;
 
     @Builder
@@ -47,13 +44,21 @@ public class Product {
         this.status = ProductStatus.ACTIVE;
     }
 
-    public void update(ProductInfo info) {
-        this.name = info.getName();
-        this.price = info.getPrice();
-        this.product_detail = info.getProduct_detail();
-        this.image = info.getImage();
+    //==비즈니스 로직==//
+
+    /**
+     * 상품 수정
+     */
+    public void update(UpdateProductRequest request) {
+        this.name = request.getName();
+        this.price = request.getPrice();
+        this.product_detail = request.getProduct_detail();
+        this.image = request.getImage();
     }
 
+    /**
+     * 상품 삭제
+     */
     public void delete() {
         this.status = ProductStatus.INACTIVE;
     }

@@ -1,10 +1,10 @@
 package com.nps.coco.domain.product.service;
 
-import com.nps.coco.domain.product.dto.ProductInfo;
+import com.nps.coco.domain.product.dto.CreateProductRequest;
+import com.nps.coco.domain.product.dto.UpdateProductRequest;
 import com.nps.coco.domain.product.entity.Product;
 import com.nps.coco.domain.product.repository.ProductRepository;
 import com.nps.coco.domain.seller.entity.Seller;
-import com.nps.coco.domain.seller.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,25 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final SellerRepository sellerRepository;
 
     /**
      * 상품 등록
      */
-    public Long add(Long sellerId, ProductInfo info) {
+    @Transactional
+    public Long add(Seller seller, CreateProductRequest request) {
 
-        Seller seller = sellerRepository.findById(sellerId).orElseThrow();
-
-        Product product = Product.builder()
-                .seller(seller)
-                .name(info.getName())
-                .price(info.getPrice())
-                .product_detail(info.getProduct_detail())
-                .image(info.getImage())
-                .build();
+        Product product =
+                Product.builder()
+                        .seller(seller)
+                        .name(request.getName())
+                        .price(request.getPrice())
+                        .product_detail(request.getProduct_detail())
+                        .image(request.getImage()).build();
 
         productRepository.save(product);
-
         return product.getId();
     }
 
@@ -41,18 +38,34 @@ public class ProductService {
      * 상품 수정
      */
     @Transactional
-    public void edit(Long productId, ProductInfo info) {
+    public void edit(Seller seller, Long productId, UpdateProductRequest request) {
+
         Product product = productRepository.findById(productId).orElseThrow();
-        product.update(info);
+
+        validateLoginSeller(seller, product);
+
+        product.update(request);
+        productRepository.save(product);
     }
 
     /**
      * 상품 삭제
      */
     @Transactional
-    public void delete(Long productId) {
+    public void delete(Seller seller, Long productId) {
+
         Product product = productRepository.findById(productId).orElseThrow();
+
+        validateLoginSeller(seller, product);
+
         product.delete();
+        productRepository.save(product);
+    }
+
+    private void validateLoginSeller(Seller seller, Product product) {
+        if (seller != product.getSeller()) {
+            throw new IllegalStateException("");
+        }
     }
 
 }
