@@ -22,39 +22,42 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     @PostMapping("/products/add")
-    public ResponseEntity<?> add(@SessionAttribute(name = "loginSeller", required = false) Seller loginSeller,
+    public ResponseEntity<?> add(@SessionAttribute(name = "seller", required = false) Seller seller,
                                  @RequestBody CreateProductRequest request) {
 
-        if (loginSeller == null) {
+        if (seller == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
         }
 
-        productService.add(loginSeller, request);
+        productService.add(seller, request);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 
     @PostMapping("/products/{productId}/edit")
-    public ResponseEntity<?> edit(@SessionAttribute(name = "loginSeller", required = false) Seller loginSeller,
+    public ResponseEntity<?> edit(@SessionAttribute(name = "seller", required = false) Seller seller,
                                   @PathVariable("productId") Long productId,
                                   @RequestBody UpdateProductRequest request) {
 
-        if (loginSeller == null) {
+        if (seller == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
         }
 
-        productService.edit(loginSeller, productId, request);
+        productService.edit(seller, productId, request);
+
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
     @PostMapping("/products/{productId}/delete")
-    public ResponseEntity<?> delete(@SessionAttribute(name = "loginSeller", required = false) Seller loginSeller,
+    public ResponseEntity<?> delete(@SessionAttribute(name = "seller", required = false) Seller seller,
                                     @PathVariable("productId") Long productId) {
 
-        if (loginSeller == null) {
+        if (seller == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
         }
 
-        productService.delete(loginSeller, productId);
+        productService.delete(seller, productId);
+
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 

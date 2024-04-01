@@ -22,15 +22,16 @@ public class ProductService {
     @Transactional
     public Long add(Seller seller, CreateProductRequest request) {
 
-        Product product =
-                Product.builder()
-                        .seller(seller)
-                        .name(request.getName())
-                        .price(request.getPrice())
-                        .product_detail(request.getProduct_detail())
-                        .image(request.getImage()).build();
+        Product product = Product.builder()
+                .seller(seller)
+                .name(request.getName())
+                .price(request.getPrice())
+                .product_detail(request.getProduct_detail())
+                .image(request.getImage())
+                .build();
 
         productRepository.save(product);
+
         return product.getId();
     }
 
