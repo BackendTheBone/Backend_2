@@ -39,7 +39,7 @@ public class ProductService {
      * 상품 수정
      */
     @Transactional
-    public void edit(Seller seller, Long productId, UpdateProductRequest request) {
+    public Long edit(Seller seller, Long productId, UpdateProductRequest request) {
 
         Product product = productRepository.findById(productId).orElseThrow();
 
@@ -47,7 +47,7 @@ public class ProductService {
 
         product.update(request);
 
-        productRepository.save(product);
+        return product.getId();
     }
 
     /**

@@ -66,11 +66,12 @@ class ProductServiceTest {
                 .build();
 
         //when
-        productService.edit(seller, product.getId(), request);
+        Long productId = productService.edit(seller, product.getId(), request);
 
         //then
         Product getProduct = productRepository.findById(product.getId()).orElseThrow();
 
+        assertEquals(productId, getProduct.getId());
         assertEquals("name2", getProduct.getName());
         assertEquals(2L, getProduct.getPrice());
         assertEquals("product_detail2", getProduct.getProduct_detail());
