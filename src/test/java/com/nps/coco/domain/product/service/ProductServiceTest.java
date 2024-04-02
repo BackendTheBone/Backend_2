@@ -66,12 +66,11 @@ class ProductServiceTest {
                 .build();
 
         //when
-        Long productId = productService.edit(seller, product.getId(), request);
+        productService.edit(seller, product.getId(), request);
 
         //then
         Product getProduct = productRepository.findById(product.getId()).orElseThrow();
 
-        assertEquals(productId, getProduct.getId());
         assertEquals("name2", getProduct.getName());
         assertEquals(2L, getProduct.getPrice());
         assertEquals("product_detail2", getProduct.getProduct_detail());
@@ -94,6 +93,32 @@ class ProductServiceTest {
 
         //when
         assertThrows(IllegalStateException.class, () -> productService.edit(seller2, product.getId(), request));
+    }
+
+    @Test
+    void 상품삭제() {
+        //given
+        Seller seller = seller1();
+        Product product = product1(seller);
+
+        //when
+        productService.delete(seller, product.getId());
+
+        //then
+        Product getProduct = productRepository.findById(product.getId()).orElseThrow();
+
+        assertEquals(ProductStatus.INACTIVE, getProduct.getStatus());
+    }
+
+    @Test
+    void 상품삭제_판매자불일치() {
+        //given
+        Seller seller1 = seller1();
+        Seller seller2 = seller2();
+        Product product = product1(seller1);
+
+        //when
+        assertThrows(IllegalStateException.class, () -> productService.delete(seller2, product.getId()));
     }
 
     Seller seller1() {

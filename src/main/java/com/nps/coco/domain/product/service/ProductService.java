@@ -39,15 +39,13 @@ public class ProductService {
      * 상품 수정
      */
     @Transactional
-    public Long edit(Seller seller, Long productId, UpdateProductRequest request) {
+    public void edit(Seller seller, Long productId, UpdateProductRequest request) {
 
         Product product = productRepository.findById(productId).orElseThrow();
 
         validateLoginSeller(seller, product);
 
         product.update(request);
-
-        return product.getId();
     }
 
     /**
@@ -61,6 +59,7 @@ public class ProductService {
         validateLoginSeller(seller, product);
 
         product.delete();
+
         productRepository.save(product);
     }
 
