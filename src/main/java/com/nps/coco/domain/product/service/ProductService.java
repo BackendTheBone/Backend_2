@@ -46,6 +46,7 @@ public class ProductService {
         validateLoginSeller(seller, product);
 
         product.update(request);
+
         productRepository.save(product);
     }
 
