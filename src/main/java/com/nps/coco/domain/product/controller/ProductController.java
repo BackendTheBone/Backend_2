@@ -1,8 +1,10 @@
 package com.nps.coco.domain.product.controller;
 
+import com.nps.coco.domain.product.dto.CreateProductForm;
 import com.nps.coco.domain.product.dto.CreateProductRequest;
 import com.nps.coco.domain.product.dto.UpdateProductRequest;
 import com.nps.coco.domain.product.entity.Product;
+import com.nps.coco.domain.product.file.FileStore;
 import com.nps.coco.domain.product.repository.ProductRepository;
 import com.nps.coco.domain.product.service.ProductService;
 import com.nps.coco.domain.seller.entity.Seller;
@@ -14,20 +16,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
     private final ProductRepository productRepository;
+    private final FileStore fileStore;
 
     @PostMapping("/products/add")
     public ResponseEntity<?> add(@SessionAttribute(name = "seller", required = false) Seller seller,
-                                 @RequestBody CreateProductRequest request) {
+                                 @ModelAttribute CreateProductForm form) throws IOException {
 
         if (seller == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
         }
+
+        String image = fileStore.storeFile(form.getImage());
+
+        CreateProductRequest request = CreateProductRequest.builder()
+                .name(form.getName())
+                .price(form.getPrice())
+                .product_detail(form.getProduct_detail())
+                .image(image)
+                .build();
 
         productService.add(seller, request);
 
