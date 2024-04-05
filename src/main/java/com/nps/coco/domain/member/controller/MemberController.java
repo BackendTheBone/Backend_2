@@ -84,7 +84,6 @@ public class MemberController {
     @PostMapping("/passCheck")
     public ResponseEntity<?> modifyMember(@RequestBody PassCheckRequest request){
         Member member = (Member) session.getAttribute("member");
-//        boolean isValid = passwordEncoder.matches(member.getPassword(), request.getPassword());
         if (member != null && member.getPassword().equals(request.getPassword())) {
             return ResponseEntity.accepted().body("ACCEPT");
         }
