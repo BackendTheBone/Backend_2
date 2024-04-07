@@ -1,24 +1,26 @@
 package com.nps.coco.domain.product.file;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class FileStore {
 
-    @Value("${file.dir}")
-    private String fileDir;
+    private final AmazonS3 amazonS3Client;
 
-    public String getFullPath(String filename) {
-        return fileDir + filename;
-    }
+    @Value("${aws.s3.bucket}")
+    private String bucket;
 
     public List<String> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
         List<String> storeFileResult = new ArrayList<>();
@@ -37,8 +39,21 @@ public class FileStore {
 
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
-        return storeFileName;
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(multipartFile.getContentType());
+        metadata.setContentLength(multipartFile.getSize());
+
+        PutObjectRequest request = new PutObjectRequest(
+                bucket,
+                storeFileName,
+                multipartFile.getInputStream(),
+                metadata
+        );
+
+        amazonS3Client.putObject(request);
+
+        return amazonS3Client.getUrl(bucket, storeFileName).toString();
     }
 
     private String createStoreFileName(String originalFilename) {
