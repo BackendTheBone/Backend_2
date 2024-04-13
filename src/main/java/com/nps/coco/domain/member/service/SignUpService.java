@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 public class SignUpService {
 
     private final MemberRepository memberRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private SignUpService (MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = new PasswordEncoder();
     }
 
-    public void signUp(String email, String name, String password) {
+    public void signUp(String email, String name, String password) throws Exception {
         validateDuplicateEmail(email);
         String encodedPass = passwordEncoder.encodePassword(password);
         Member member = new Member(email, name, encodedPass);

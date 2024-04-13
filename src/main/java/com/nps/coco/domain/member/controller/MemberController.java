@@ -1,14 +1,8 @@
 package com.nps.coco.domain.member.controller;
 
-import com.nps.coco.domain.member.dto.ModifyRequest;
-import com.nps.coco.domain.member.dto.PassCheckRequest;
-import com.nps.coco.domain.member.dto.SignInRequest;
-import com.nps.coco.domain.member.dto.SignUpRequest;
+import com.nps.coco.domain.member.dto.*;
 import com.nps.coco.domain.member.entity.Member;
-import com.nps.coco.domain.member.service.DeleteService;
-import com.nps.coco.domain.member.service.ModifyService;
-import com.nps.coco.domain.member.service.SignInService;
-import com.nps.coco.domain.member.service.SignUpService;
+import com.nps.coco.domain.member.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +21,7 @@ public class MemberController {
     private final SignInService signInService;
     private final DeleteService deleteService;
     private final ModifyService modifyService;
+    private final EmailService emailService;
     private final HttpSession session;
 
     @PostMapping("/signUp")
@@ -99,5 +94,10 @@ public class MemberController {
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD");
         }
+    }
+
+    @PostMapping("/sendEmail")
+    public void sendEmail(@RequestBody EmailRequest request) throws Exception {
+        emailService.sendEmailMessage(request.getEmail());
     }
 }
