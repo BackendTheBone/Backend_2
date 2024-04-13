@@ -12,7 +12,7 @@ public class SignInService {
 
     private final MemberRepository memberRepository;
     private final HttpSession session;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private SignInService(MemberRepository memberRepository, HttpSession session) {
         this.memberRepository = memberRepository;
